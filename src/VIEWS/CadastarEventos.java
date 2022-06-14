@@ -7,6 +7,7 @@ package VIEWS;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import sistemacadastramentoeavaliacaodeeventos.ConexaBD;
 
@@ -62,6 +63,7 @@ public class CadastarEventos extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -71,6 +73,8 @@ public class CadastarEventos extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(51, 153, 255));
         jLabel2.setText("Nome do evento ");
+
+        txt_DChooserData.setDateFormatString("yyyy-MM-dd");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(51, 153, 255));
@@ -387,6 +391,7 @@ public class CadastarEventos extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void ComboBoxTipoDeEventosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxTipoDeEventosActionPerformed
@@ -433,39 +438,52 @@ public class CadastarEventos extends javax.swing.JFrame {
         ComboBoxEspacoFisico.setSelectedIndex(-1);
         ComboBoxTipoDeEventos.setSelectedIndex(-1);
         txt_DChooserData.setDate(null);
-        
-                
+
+
     }//GEN-LAST:event_lbtnLimparActionPerformed
 
     private void lbtnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lbtnSalvarActionPerformed
         // TODO add your handling code here:
         dispose();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dataEvento = sdf.format(txt_DChooserData.getDate());
+           Connection con = ConexaBD.ligar();
+           
         try {
-            Connection con = ConexaBD.ligar();
+         
             String inserir = "INSERT INTO evento (NomeEvento, DataEvento, Descrissao, Duracao, tipo, incioEvento, fimEvento) "
                     + "values (?,?,?,?,?,?,?)";
             PreparedStatement ps = con.prepareStatement(inserir);
             ps.setString(1, txt_NomeEvento.getText());
-            ps.setString(2, txt_DChooserData.getDate().toString());
+            ps.setString(2, dataEvento);
             ps.setString(3, txt_descrissao.getText());
             ps.setString(4, txt_Duracao.getText());
-            ps.setString(5, ComboBoxTipoDeEventos.getSelectedItem()+"");
+            ps.setString(5, ComboBoxTipoDeEventos.getSelectedItem()+ "");
             ps.setString(6, txt_HoraInicio.getText());
             ps.setString(7, txt_HoraFIM.getText());
-            
-           inserir = "INSERT INTO ambiente ( espacoFisico, numLugares) values (?,?)";
-            ps.setString(1, ComboBoxEspacoFisico.getSelectedItem()+"");
+            //ps.setString(8, txt_usuario.getText());
+                    
+
+           
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(null, erro);
+        }
+        
+        try {
+              
+            String inserir = "INSERT INTO ambiente ( espacoFisico, numLugares) values (?,?)";
+             PreparedStatement ps = con.prepareStatement(inserir);
+            ps.setString(1, ComboBoxEspacoFisico.getSelectedItem() + "");
             ps.setString(2, txt_NumLugares.getText());
             ps.execute();
             ps.close();
             con.close();
             
-             JOptionPane.showMessageDialog(null, "EVENTO MARCADO");
         } catch (Exception erro) {
-            JOptionPane.showMessageDialog(null, erro);
+             JOptionPane.showMessageDialog(null, erro);
         }
-        
-        
+
+         JOptionPane.showMessageDialog(null, "EVENTO MARCADO");
     }//GEN-LAST:event_lbtnSalvarActionPerformed
 
     /**

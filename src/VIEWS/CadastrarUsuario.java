@@ -6,8 +6,10 @@
 package VIEWS;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -128,6 +130,8 @@ public class CadastrarUsuario extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(51, 153, 255));
         jLabel9.setText("Data de Nascimento:");
+
+        txt_DateChooser.setDateFormatString("yyyy-MM-dd");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -315,22 +319,24 @@ public class CadastrarUsuario extends javax.swing.JFrame {
     private void btnRegistarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistarActionPerformed
         // TODO add your handling code here:
         dispose();
-
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String data = sdf.format(txt_DateChooser.getDate());
         try {
-            
+
             Connection con = ConexaBD.ligar();
-            String inserir = "INSERT INTO usuario(Nome, Sobrenome, Email, Senha, DataNascimento, Nivel) values (?,?,?,?,?,?)";
+            String inserir = "INSERT INTO usuario(Nome, Sobrenome, Email, Senha, DataNascimento, Nivel)"
+                    + " values (?,?,?,?,?,?)";
             PreparedStatement ps = con.prepareStatement(inserir);
             ps.setString(1, txt_Nome.getText());
-            ps.setString(2, txt_Sobrenome .getText());
+            ps.setString(2, txt_Sobrenome.getText());
             ps.setString(3, txt_Email.getText());
-            ps.setString(4, txt_DateChooser.getDate().toString());
-            ps.setString(5, txt_Senha.getText());
-            ps.setString(6, ComboBox_Nivel.getSelectedItem()+"");
+            ps.setString(4, txt_Senha.getText());
+            ps.setString(5, data);
+            ps.setString(6, ComboBox_Nivel.getSelectedItem() + "");
             ps.execute();
             ps.close();
             con.close();
-            
+
             JOptionPane.showMessageDialog(null, "USUARIO REGISTADO");
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, erro);
@@ -345,11 +351,11 @@ public class CadastrarUsuario extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_jLablCLOSEMouseClicked
-     
+
     /**
      * @param args the command line arguments
      */
-
+  
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> ComboBox_Nivel;
     private javax.swing.JButton btnLimpar;

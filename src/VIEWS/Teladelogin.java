@@ -217,20 +217,20 @@ public class Teladelogin extends javax.swing.JFrame {
 
                 email = rs.getString("Email");
                 senha = rs.getString("Senha");
-
-              //  stmt.close();
-               // rs.close();
+//               stmt.close();
+//                rs.close();
             }
 
            // System.out.println("Email: " + email + " SENHA: " + senha);
             if (textEmail.getText().equals(email) && txtPassword.getText().equals(senha)) {
 
-                boolean user = true;
+                 //boolean user = true;
                 
-                TelaHome th = new TelaHome(user);
+                TelaHome th = new TelaHome();
                 th.setVisible(true);
 
             } else {
+                
                 JOptionPane.showMessageDialog(null, "Usuário ou Password Incorretos");
             }
 
@@ -238,8 +238,7 @@ public class Teladelogin extends javax.swing.JFrame {
             ex.printStackTrace();
             
         }
-        dispose();
-          
+        
        
 
 

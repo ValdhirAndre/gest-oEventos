@@ -5,6 +5,15 @@
  */
 package VIEWS;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import sistemacadastramentoeavaliacaodeeventos.ConexaBD;
+
 /**
  *
  * @author Fortunato José
@@ -16,6 +25,40 @@ public class eventosUsuarios extends javax.swing.JFrame {
      */
     public eventosUsuarios() {
         initComponents();
+        CarreagarTable();
+    }
+    
+     private void CarreagarTable() {
+        Object[] columnNames = {"ID","Nome","N Lugares", "Data de Evento", "Avaliacao","Hora do Inicio","Hora do Fim","Duracao","Funcionario"};
+        Object[] lista = new Object[10];
+        DefaultTableModel tbModelF = new DefaultTableModel();
+        tbModelF.setColumnIdentifiers(columnNames);
+        
+        Connection conect = ConexaBD.ligar();
+        String sql = String.format("SELECT * FROM evento as e join ambiente as a on (e.ambienteFK = a.IdAmbiente)");
+        try (Statement stmt = conect.createStatement()) {
+            stmt.execute(sql);
+            try (ResultSet rs = stmt.executeQuery(sql)) {
+                while (rs.next()) {
+                     lista[0] = (rs.getString("IdEvento"));
+                    lista[1] = (rs.getString("NomeEvento"));
+                    lista[2] = (rs.getString("numLugares"));
+                    lista[3] = (rs.getString("DataEvento"));
+                    lista[4] = (rs.getString("Avaliacao"));
+                    lista[5] = (rs.getString("inicioEvento"));
+                    lista[6] = (rs.getString("fimEvento"));
+//                    lista[7] = (rs.getString("nome"));
+//                    lista[8] = (rs.getString("duracao"));
+                    tbModelF.addRow(lista);
+                }
+                tblEventos.setModel(tbModelF);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+
+        }
+
     }
 
     /**
@@ -30,78 +73,128 @@ public class eventosUsuarios extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         jBtnParticipar = new javax.swing.JButton();
         jBtnAvaliar = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblEventos = new javax.swing.JTable();
+        jdesktpPane1 = new javax.swing.JDesktopPane();
+        jlFechar = new javax.swing.JLabel();
         lbtnVoltar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 102));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
-
+        jBtnParticipar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jBtnParticipar.setForeground(new java.awt.Color(51, 153, 255));
+        jBtnParticipar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/Notes.png"))); // NOI18N
         jBtnParticipar.setText("Participar");
+        jBtnParticipar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnParticiparActionPerformed(evt);
+            }
+        });
 
-        jBtnAvaliar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jBtnAvaliar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jBtnAvaliar.setForeground(new java.awt.Color(51, 153, 255));
+        jBtnAvaliar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/How-to.png"))); // NOI18N
         jBtnAvaliar.setText("Avaliar");
+        jBtnAvaliar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnAvaliarActionPerformed(evt);
+            }
+        });
 
         jLabel9.setBackground(new java.awt.Color(255, 255, 255));
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/ISA LOG.png"))); // NOI18N
+
+        tblEventos.setAutoCreateRowSorter(true);
+        tblEventos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Id", "Nome", "Nº Lugares", "Data do Evento", "Descricao", "Avaliação", "Tipo", "Inicio", "Fim", "Usuario"
+            }
+        ));
+        tblEventos.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tblEventos.setDropMode(javax.swing.DropMode.INSERT_ROWS);
+        tblEventos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblEventosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblEventos);
+
+        jdesktpPane1.setBackground(new java.awt.Color(255, 255, 255));
+        jdesktpPane1.setFocusable(false);
+
+        javax.swing.GroupLayout jdesktpPane1Layout = new javax.swing.GroupLayout(jdesktpPane1);
+        jdesktpPane1.setLayout(jdesktpPane1Layout);
+        jdesktpPane1Layout.setHorizontalGroup(
+            jdesktpPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jdesktpPane1Layout.setVerticalGroup(
+            jdesktpPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jBtnParticipar)
-                        .addGap(31, 31, 31)
-                        .addComponent(jBtnAvaliar)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 668, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 824, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(23, 23, 23)
+                                .addComponent(jBtnParticipar)
+                                .addGap(72, 72, 72)
+                                .addComponent(jBtnAvaliar)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jdesktpPane1)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBtnParticipar)
-                    .addComponent(jBtnAvaliar))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 149, Short.MAX_VALUE)
-                .addGap(19, 19, 19))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 134, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jBtnParticipar)
+                            .addComponent(jBtnAvaliar))
+                        .addGap(52, 52, 52)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jdesktpPane1)
+                        .addContainerGap())))
         );
 
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/Close.png"))); // NOI18N
+        jlFechar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/Close.png"))); // NOI18N
+        jlFechar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jlFecharMouseClicked(evt);
+            }
+        });
 
         lbtnVoltar.setBackground(new java.awt.Color(255, 255, 255));
         lbtnVoltar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -117,7 +210,7 @@ public class eventosUsuarios extends javax.swing.JFrame {
         jLabel3.setBackground(new java.awt.Color(255, 255, 255));
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(51, 153, 255));
-        jLabel3.setText("EVENTOS");
+        jLabel3.setText("PARTICIPANTES");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -130,10 +223,10 @@ public class eventosUsuarios extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(8, 8, 8)
                         .addComponent(lbtnVoltar)
-                        .addGap(173, 173, 173)
+                        .addGap(201, 201, 201)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel8)))
+                        .addComponent(jlFechar)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -144,7 +237,7 @@ public class eventosUsuarios extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(lbtnVoltar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel8))
+                    .addComponent(jlFechar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -168,52 +261,56 @@ public class eventosUsuarios extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_lbtnVoltarActionPerformed
 
+    private void tblEventosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEventosMouseClicked
+        // TODO add your handling code here:
+//        int row=tblEventos.getSelectedRow();
+//        TableModel model=tblEventos.getModel();
+//        txt_NomeEvento.setText((model.getValueAt(row,1).toString()));
+//        txt_NumLugares.setText(model.getValueAt(row, 2).toString());
+//        txtDataEvento.setText(model.getValueAt(row,3).toString());
+//        txt_HoraInicio.setText((model.getValueAt(row,5).toString()));
+//        txt_HoraFIM.setText(model.getValueAt(row, 6).toString());
+    }//GEN-LAST:event_tblEventosMouseClicked
+
+    private void jBtnAvaliarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAvaliarActionPerformed
+        // TODO add your handling code here:
+       avaliacar av = new avaliacar();
+       jdesktpPane1.removeAll();
+       jdesktpPane1.add(av).setVisible(true);
+        
+    }//GEN-LAST:event_jBtnAvaliarActionPerformed
+
+    private void jlFecharMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlFecharMouseClicked
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_jlFecharMouseClicked
+
+    private void jBtnParticiparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnParticiparActionPerformed
+        // TODO add your handling code here:
+        Participar p = new Participar();
+        jdesktpPane1.removeAll();
+        jdesktpPane1.add(p).setVisible(true);
+   
+         
+    }//GEN-LAST:event_jBtnParticiparActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(eventosUsuarios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(eventosUsuarios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(eventosUsuarios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(eventosUsuarios.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new eventosUsuarios().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBtnAvaliar;
     private javax.swing.JButton jBtnParticipar;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JDesktopPane jdesktpPane1;
+    private javax.swing.JLabel jlFechar;
     private javax.swing.JButton lbtnVoltar;
+    private javax.swing.JTable tblEventos;
     // End of variables declaration//GEN-END:variables
 }

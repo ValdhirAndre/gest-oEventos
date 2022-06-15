@@ -236,6 +236,7 @@ public class CadastrarUsuario extends javax.swing.JFrame {
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jButton3.setForeground(new java.awt.Color(51, 153, 255));
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/Go back.png"))); // NOI18N
         jButton3.setText("VOLTAR");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -345,6 +346,10 @@ public class CadastrarUsuario extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        dispose();
+        Teladelogin t = new Teladelogin();
+        t.setVisible(true);
+        
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jLablCLOSEMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLablCLOSEMouseClicked

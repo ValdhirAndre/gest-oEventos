@@ -30,29 +30,57 @@ public final class TelaHome extends javax.swing.JFrame {
         //else jMenuItem6.setVisible(true);
         initComponents();
         CarreagarTable();
+        jbtnEditarevento.setEnabled(false);
+        jbtnEliminarEvento.setEnabled(false);
+    }
+
+    private int BuscarIDAmbiente(String Espaco) {
+        Connection conect = ConexaBD.ligar();
+        String sql = String.format("SELECT IdAmbiente FROM ambiente WHERE espacoFisico = '%s'", Espaco);
+        try ( Statement stmt = conect.createStatement()) {
+            stmt.execute(sql);
+            try ( ResultSet rs = stmt.executeQuery(sql)) {
+                rs.next();
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return 0;
+        }
     }
 
     private void CarreagarTable() {
-        Object[] columnNames = {"ID","Nome","N Lugares", "Data de Evento", "Avaliacao","Hora do Inicio","Hora do Fim","Duracao","Funcionario"};
-        Object[] lista = new Object[10];
-        DefaultTableModel tbModelF = new DefaultTableModel();
+        Object[] columnNames = {"ID", "Nome", "N Lugares", "Data de Evento", "Avaliacao", "Hora do Inicio", "Hora do Fim", "Descricao", "Duracao","Tipo de Evento","Lugar Fisico", "Funcionario"};
+        Object[] lista = new Object[15];
+        DefaultTableModel tbModelF = new DefaultTableModel() {
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+
+        };
         tbModelF.setColumnIdentifiers(columnNames);
-        
+
         Connection conect = ConexaBD.ligar();
-        String sql = String.format("SELECT * FROM evento as e join ambiente as a on (e.ambienteFK = a.IdAmbiente)");
-        try (Statement stmt = conect.createStatement()) {
+        String sql = String.format("call gestao_de_eventos.MostrarEventos()");
+        try ( Statement stmt = conect.createStatement()) {
             stmt.execute(sql);
-            try (ResultSet rs = stmt.executeQuery(sql)) {
+            try ( ResultSet rs = stmt.executeQuery(sql)) {
                 while (rs.next()) {
-                     lista[0] = (rs.getString("IdEvento"));
+                    lista[0] = (rs.getString("idEvento"));
                     lista[1] = (rs.getString("NomeEvento"));
                     lista[2] = (rs.getString("numLugares"));
                     lista[3] = (rs.getString("DataEvento"));
                     lista[4] = (rs.getString("Avaliacao"));
                     lista[5] = (rs.getString("inicioEvento"));
                     lista[6] = (rs.getString("fimEvento"));
-//                    lista[7] = (rs.getString("nome"));
-//                    lista[8] = (rs.getString("duracao"));
+                    lista[7] = (rs.getString("Descrissao"));
+                    lista[8] = (rs.getString("duracao"));
+                    lista[9] = (rs.getString("tipo"));
+                    lista[10] = (rs.getString("espacoFisico"));
+                    lista[11] = (rs.getString("nome"));
                     tbModelF.addRow(lista);
                 }
                 tblEventos.setModel(tbModelF);
@@ -100,8 +128,6 @@ public final class TelaHome extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         cbEspacoFisico = new javax.swing.JComboBox<>();
-        txt_NumLugares = new javax.swing.JTextField();
-        jLabel11 = new javax.swing.JLabel();
         txt_Duracao = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         txtInicio = new javax.swing.JTextField();
@@ -113,7 +139,7 @@ public final class TelaHome extends javax.swing.JFrame {
         jLabel18 = new javax.swing.JLabel();
         txtUsuario = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
-        lbtnSalvar = new javax.swing.JButton();
+        JbtnSalvar = new javax.swing.JButton();
         lbtnLimpar = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuHome = new javax.swing.JMenu();
@@ -136,7 +162,6 @@ public final class TelaHome extends javax.swing.JFrame {
         jPasswordField1.setText("jPasswordField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setAlwaysOnTop(true);
         setUndecorated(true);
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -151,7 +176,6 @@ public final class TelaHome extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(0, 0, 102));
         jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon("E:\\icomses\\imagesISAF.jpeg")); // NOI18N
         jLabel2.setText("jLabel2");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -225,7 +249,7 @@ public final class TelaHome extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(jlhora)
                     .addComponent(labelData))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
 
         tblEventos.setAutoCreateRowSorter(true);
@@ -269,22 +293,26 @@ public final class TelaHome extends javax.swing.JFrame {
         jLabel8.setForeground(new java.awt.Color(0, 153, 255));
         jLabel8.setText("EVENTOS MARCADOS");
 
-        jbtnEditarevento.setBackground(new java.awt.Color(255, 255, 255));
         jbtnEditarevento.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jbtnEditarevento.setForeground(new java.awt.Color(0, 153, 255));
-        jbtnEditarevento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/Modify.png"))); // NOI18N
         jbtnEditarevento.setText("EDITAR");
+        jbtnEditarevento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnEditareventoActionPerformed(evt);
+            }
+        });
 
-        jbtnEliminarEvento.setBackground(new java.awt.Color(255, 255, 255));
         jbtnEliminarEvento.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jbtnEliminarEvento.setForeground(new java.awt.Color(0, 153, 255));
-        jbtnEliminarEvento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/Erase.png"))); // NOI18N
         jbtnEliminarEvento.setText("ELIMINAR");
+        jbtnEliminarEvento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnEliminarEventoActionPerformed(evt);
+            }
+        });
 
-        jbtnGerirAbt.setBackground(new java.awt.Color(255, 255, 255));
         jbtnGerirAbt.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jbtnGerirAbt.setForeground(new java.awt.Color(0, 153, 255));
-        jbtnGerirAbt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/Text preview.png"))); // NOI18N
         jbtnGerirAbt.setText("AMBIENTE");
 
         jPanel3.setBackground(new java.awt.Color(0, 0, 102));
@@ -321,7 +349,7 @@ public final class TelaHome extends javax.swing.JFrame {
         jPanel3.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 60, -1, -1));
 
         cbEspacoFisico.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        cbEspacoFisico.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Auditório", "Multifunções", "Pátio", "Sala de Aula", "Outro", "Nenhum" }));
+        cbEspacoFisico.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Auditório", "Multifunções", "Pátio", "Sala de Aula", "Outro" }));
         cbEspacoFisico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbEspacoFisicoActionPerformed(evt);
@@ -329,48 +357,36 @@ public final class TelaHome extends javax.swing.JFrame {
         });
         jPanel3.add(cbEspacoFisico, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 80, 118, -1));
 
-        txt_NumLugares.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_NumLugaresActionPerformed(evt);
-            }
-        });
-        jPanel3.add(txt_NumLugares, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 85, 22));
-
-        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(51, 153, 255));
-        jLabel11.setText("Nº Lugares ");
-        jPanel3.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, -1, -1));
-
         txt_Duracao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_DuracaoActionPerformed(evt);
             }
         });
-        jPanel3.add(txt_Duracao, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 140, 100, 22));
+        jPanel3.add(txt_Duracao, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 140, 100, 22));
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(51, 153, 255));
         jLabel12.setText("Duração");
-        jPanel3.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 120, -1, 20));
+        jPanel3.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 120, -1, 20));
 
         txtInicio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtInicioActionPerformed(evt);
             }
         });
-        jPanel3.add(txtInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 140, 90, 22));
+        jPanel3.add(txtInicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 90, 22));
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(51, 153, 255));
         jLabel14.setText("Início");
-        jPanel3.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 120, 40, 20));
+        jPanel3.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 40, 20));
 
         txtFim.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtFimActionPerformed(evt);
             }
         });
-        jPanel3.add(txtFim, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 140, 70, 22));
+        jPanel3.add(txtFim, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 140, 70, 22));
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(51, 153, 255));
@@ -382,35 +398,31 @@ public final class TelaHome extends javax.swing.JFrame {
         jLabel18.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(51, 153, 255));
         jLabel18.setText("Fim");
-        jPanel3.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 120, -1, -1));
+        jPanel3.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 120, -1, -1));
 
         txtUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtUsuarioActionPerformed(evt);
             }
         });
-        jPanel3.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 140, 265, 22));
+        jPanel3.add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 140, 265, 22));
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(51, 153, 255));
         jLabel16.setText("Cadastrado Por");
-        jPanel3.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 120, -1, -1));
+        jPanel3.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 120, -1, -1));
 
-        lbtnSalvar.setBackground(new java.awt.Color(255, 255, 255));
-        lbtnSalvar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lbtnSalvar.setForeground(new java.awt.Color(51, 153, 255));
-        lbtnSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/Save.png"))); // NOI18N
-        lbtnSalvar.setText("SALVAR");
-        lbtnSalvar.addActionListener(new java.awt.event.ActionListener() {
+        JbtnSalvar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        JbtnSalvar.setForeground(new java.awt.Color(51, 153, 255));
+        JbtnSalvar.setText("SALVAR");
+        JbtnSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lbtnSalvarActionPerformed(evt);
+                JbtnSalvarActionPerformed(evt);
             }
         });
 
-        lbtnLimpar.setBackground(new java.awt.Color(255, 255, 255));
         lbtnLimpar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lbtnLimpar.setForeground(new java.awt.Color(51, 153, 255));
-        lbtnLimpar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/Redo.png"))); // NOI18N
         lbtnLimpar.setText("LIMPAR");
         lbtnLimpar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -428,7 +440,7 @@ public final class TelaHome extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(161, 161, 161)
-                        .addComponent(lbtnSalvar)
+                        .addComponent(JbtnSalvar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jbtnEliminarEvento)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -465,7 +477,7 @@ public final class TelaHome extends javax.swing.JFrame {
                             .addComponent(jbtnGerirAbt)
                             .addComponent(jbtnEditarevento)
                             .addComponent(jbtnEliminarEvento)
-                            .addComponent(lbtnSalvar)
+                            .addComponent(JbtnSalvar)
                             .addComponent(lbtnLimpar))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -477,7 +489,6 @@ public final class TelaHome extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jMenuHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/Home.png"))); // NOI18N
         jMenuHome.setText("Home");
         jMenuHome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -486,7 +497,6 @@ public final class TelaHome extends javax.swing.JFrame {
         });
         jMenuBar1.add(jMenuHome);
 
-        jMenu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/Help.png"))); // NOI18N
         jMenu4.setText("Ajuda");
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
@@ -495,10 +505,9 @@ public final class TelaHome extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu4);
 
-        jMenu5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/Close.png"))); // NOI18N
         jMenu5.setText("Fechar");
 
-        jItemFechar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
+        jItemFechar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_DOWN_MASK));
         jItemFechar.setText("Fechar");
         jItemFechar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -556,23 +565,19 @@ public final class TelaHome extends javax.swing.JFrame {
         txtInicio.setText("");
         txtFim.setText("");
         txt_descrissao.setText("");
-        txt_NumLugares.setText("");
         cbEspacoFisico.setSelectedIndex(-1);
         cbTipoDeEventos.setSelectedIndex(-1);
         //txt_DChooserData.setDate(null);
     }//GEN-LAST:event_lbtnLimparActionPerformed
 
-    private void lbtnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lbtnSalvarActionPerformed
-        // TODO add your handling code here:
-        dispose();
-        //        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        //        String dataEvento = sdf.format(txt_DChooserData.getDate());
+    private void JbtnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JbtnSalvarActionPerformed
+
         Connection con = ConexaBD.ligar();
 
         try {
 
-            String inserir = "INSERT INTO evento (NomeEvento, DataEvento, Descrissao, Duracao, tipo, fimEvento, inicioEvento) "
-            + "values (?,?,?,?,?,?,?)";
+            String inserir = "INSERT INTO evento (NomeEvento, DataEvento, Descrissao, Duracao, tipo, fimEvento, inicioEvento, ambienteFK) "
+                    + "values (?,?,?,?,?,?,?,?)";
             PreparedStatement ps = con.prepareStatement(inserir);
             ps.setString(1, txt_NomeEvento.getText());
             ps.setString(2, txtDataEvento.getText());
@@ -581,29 +586,33 @@ public final class TelaHome extends javax.swing.JFrame {
             ps.setString(5, cbTipoDeEventos.getSelectedItem() + "");
             ps.setString(6, txtFim.getText());
             ps.setString(7, txtInicio.getText());
+            if (cbTipoDeEventos.getSelectedItem().equals("Virtual")) {
+               ps.setInt(8, BuscarIDAmbiente("Nenhum")); 
+            }else ps.setInt(8, BuscarIDAmbiente(cbEspacoFisico.getSelectedItem().toString()));
             ps.execute();
+            CarreagarTable();
 
             //ps.setString(8, txt_usuario.getText());
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(null, erro);
         }
 
-        try {
-
-            String inserir = "INSERT INTO ambiente ( espacoFisico, numLugares) values (?,?)";
-            PreparedStatement ps = con.prepareStatement(inserir);
-            ps.setString(1, cbEspacoFisico.getSelectedItem() + "");
-            ps.setString(2, txt_NumLugares.getText());
-            ps.execute();
-            ps.close();
-            con.close();
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+//        try {
+//
+//            String inserir = "INSERT INTO ambiente ( espacoFisico, numLugares) values (?,?)";
+//            PreparedStatement ps = con.prepareStatement(inserir);
+//            ps.setString(1, cbEspacoFisico.getSelectedItem() + "");
+////            ps.setString(2, txt_NumLugares.getText());
+//            ps.execute();
+//            ps.close();
+//            con.close();
+//
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//        }
 
         JOptionPane.showMessageDialog(null, "EVENTO MARCADO");
-    }//GEN-LAST:event_lbtnSalvarActionPerformed
+    }//GEN-LAST:event_JbtnSalvarActionPerformed
 
     private void txtFimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFimActionPerformed
         // TODO add your handling code here:
@@ -617,34 +626,108 @@ public final class TelaHome extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_DuracaoActionPerformed
 
-    private void txt_NumLugaresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_NumLugaresActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_NumLugaresActionPerformed
-
     private void cbEspacoFisicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEspacoFisicoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbEspacoFisicoActionPerformed
 
     private void cbTipoDeEventosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTipoDeEventosActionPerformed
         // TODO add your handling code here:
+        if (cbTipoDeEventos.getSelectedItem().equals("Virtual")) {
+            cbEspacoFisico.setEnabled(false);
+        }else cbEspacoFisico.setEnabled(true);
     }//GEN-LAST:event_cbTipoDeEventosActionPerformed
 
     private void tblEventosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEventosMouseClicked
         // TODO add your handling code here:
-        int row=tblEventos.getSelectedRow();
-        TableModel model=tblEventos.getModel();
-        txt_NomeEvento.setText((model.getValueAt(row,1).toString()));
-        txt_NumLugares.setText(model.getValueAt(row, 2).toString());
-        txtDataEvento.setText(model.getValueAt(row,3).toString());
-        txtInicio.setText((model.getValueAt(row,5).toString()));
-        txtFim.setText(model.getValueAt(row, 6).toString());
+        jbtnEliminarEvento.setEnabled(true);
+        jbtnEditarevento.setEnabled(false);
+        if (evt.getClickCount() == 2) {
+            int row = tblEventos.getSelectedRow();
+            TableModel model = tblEventos.getModel();
+            
+            txt_NomeEvento.setText((model.getValueAt(row, 1).toString()));
+            txtDataEvento.setText(model.getValueAt(row, 3).toString());
+            txtInicio.setText((model.getValueAt(row, 5).toString()));
+            txtFim.setText(model.getValueAt(row, 6).toString());
+            txt_Duracao.setText(model.getValueAt(row, 8).toString());
+            txtUsuario.setText(model.getValueAt(row, 11).toString());
+            txt_descrissao.setText(model.getValueAt(row, 7).toString());
+            cbEspacoFisico.setSelectedItem(model.getValueAt(row, 10).toString());
+            cbTipoDeEventos.setSelectedItem(model.getValueAt(row, 9).toString());
+            txtUsuario.setEnabled(false);
+            jbtnEditarevento.setEnabled(true);
+            if (tblEventos.getSelectedRow() != -1) {
+                jbtnEliminarEvento.setEnabled(false);
+            }
+            JbtnSalvar.setEnabled(false);
+        }
 
     }//GEN-LAST:event_tblEventosMouseClicked
 
     private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtUsuarioActionPerformed
-   
+
+    private void jbtnEliminarEventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnEliminarEventoActionPerformed
+        // TODO add your handling code here:
+        Connection con = ConexaBD.ligar();
+
+        try {
+            int row = tblEventos.getSelectedRow();
+            TableModel model = tblEventos.getModel();
+
+            String delete = "DELETE FROM evento WHERE idEvento = ?";
+            PreparedStatement ps = con.prepareStatement(delete);
+            ps.setInt(1, Integer.parseInt(model.getValueAt(row, 0).toString()));
+            ps.execute();
+            
+            CarreagarTable();
+
+            //ps.setString(8, txt_usuario.getText());
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(null, erro);
+        }
+    }//GEN-LAST:event_jbtnEliminarEventoActionPerformed
+
+    private void jbtnEditareventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnEditareventoActionPerformed
+        // TODO add your handling code here:
+
+        Connection con = ConexaBD.ligar();
+        int row = tblEventos.getSelectedRow();
+        TableModel model = tblEventos.getModel();
+
+        try {
+
+            String ACt = "UPDATE evento SET NomeEvento = ? , DataEvento = ?, Descrissao = ?, Duracao = ?, tipo = ?, fimEvento = ?, inicioEvento = ?, ambienteFK = ? "
+                    + "WHERE idEvento = ?";
+            PreparedStatement ps = con.prepareStatement(ACt);
+            ps.setString(1, txt_NomeEvento.getText());
+            ps.setString(2, txtDataEvento.getText());
+            ps.setString(3, txt_descrissao.getText());
+            ps.setString(4, txt_Duracao.getText());
+            ps.setString(5, cbTipoDeEventos.getSelectedItem() + "");
+            ps.setString(6, txtFim.getText());
+            ps.setString(7, txtInicio.getText());
+            ps.setInt(8, BuscarIDAmbiente(cbEspacoFisico.getSelectedItem().toString()));
+            ps.setInt(9, Integer.parseInt(model.getValueAt(row, 0).toString()));
+            ps.execute();
+            CarreagarTable();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        txt_NomeEvento.setText("");
+        txtDataEvento.setText("");
+        txtInicio.setText("");
+        txtFim.setText("");
+        txt_Duracao.setText("");
+        txtUsuario.setText("");
+        txt_descrissao.setText("");
+
+
+    }//GEN-LAST:event_jbtnEditareventoActionPerformed
+
     public static void main(String[] args) {
 
         TelaHome t = new TelaHome();
@@ -657,53 +740,51 @@ public final class TelaHome extends javax.swing.JFrame {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> cbEspacoFisico;
-    private javax.swing.JComboBox<String> cbTipoDeEventos;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
-    private javax.swing.JMenuItem jItemFechar;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenu jMenuHome;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JToggleButton jbtnEditarevento;
-    private javax.swing.JToggleButton jbtnEliminarEvento;
-    private javax.swing.JButton jbtnGerirAbt;
-    private javax.swing.JLabel jlhora;
-    private javax.swing.JLabel labelData;
-    private javax.swing.JButton lbtnLimpar;
-    private javax.swing.JButton lbtnSalvar;
-    private javax.swing.JTable tblEventos;
-    private javax.swing.JTextField txtDataEvento;
-    private javax.swing.JTextField txtFim;
-    private javax.swing.JTextField txtInicio;
-    private javax.swing.JTextField txtUsuario;
-    private javax.swing.JTextField txt_Duracao;
-    private javax.swing.JTextField txt_NomeEvento;
-    private javax.swing.JTextField txt_NumLugares;
-    private javax.swing.JTextField txt_descrissao;
+    public javax.swing.JButton JbtnSalvar;
+    public javax.swing.JComboBox<String> cbEspacoFisico;
+    public javax.swing.JComboBox<String> cbTipoDeEventos;
+    public com.toedter.calendar.JDateChooser jDateChooser1;
+    public javax.swing.JMenuItem jItemFechar;
+    public javax.swing.JLabel jLabel1;
+    public javax.swing.JLabel jLabel10;
+    public javax.swing.JLabel jLabel12;
+    public javax.swing.JLabel jLabel14;
+    public javax.swing.JLabel jLabel15;
+    public javax.swing.JLabel jLabel16;
+    public javax.swing.JLabel jLabel18;
+    public javax.swing.JLabel jLabel2;
+    public javax.swing.JLabel jLabel4;
+    public javax.swing.JLabel jLabel5;
+    public javax.swing.JLabel jLabel6;
+    public javax.swing.JLabel jLabel7;
+    public javax.swing.JLabel jLabel8;
+    public javax.swing.JLabel jLabel9;
+    public javax.swing.JMenu jMenu4;
+    public javax.swing.JMenu jMenu5;
+    public javax.swing.JMenuBar jMenuBar1;
+    public javax.swing.JMenu jMenuHome;
+    public javax.swing.JMenuItem jMenuItem1;
+    public javax.swing.JPanel jPanel1;
+    public javax.swing.JPanel jPanel2;
+    public javax.swing.JPanel jPanel3;
+    public javax.swing.JPanel jPanel4;
+    public javax.swing.JPanel jPanel6;
+    public javax.swing.JPasswordField jPasswordField1;
+    public javax.swing.JScrollPane jScrollPane1;
+    public javax.swing.JToggleButton jbtnEditarevento;
+    public javax.swing.JToggleButton jbtnEliminarEvento;
+    public javax.swing.JButton jbtnGerirAbt;
+    public javax.swing.JLabel jlhora;
+    public javax.swing.JLabel labelData;
+    public javax.swing.JButton lbtnLimpar;
+    public javax.swing.JTable tblEventos;
+    public javax.swing.JTextField txtDataEvento;
+    public javax.swing.JTextField txtFim;
+    public javax.swing.JTextField txtInicio;
+    public javax.swing.JTextField txtUsuario;
+    public javax.swing.JTextField txt_Duracao;
+    public javax.swing.JTextField txt_NomeEvento;
+    public javax.swing.JTextField txt_descrissao;
     // End of variables declaration//GEN-END:variables
 
 //class hora implements ActionListener {

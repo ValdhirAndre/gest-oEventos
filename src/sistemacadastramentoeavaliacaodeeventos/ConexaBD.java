@@ -18,8 +18,8 @@ public class ConexaBD {
     
     public static Connection ligar(){
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            return DriverManager.getConnection("jdbc:mysql://localhost/gestao_de_eventos", "root", "");
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            return DriverManager.getConnection("jdbc:mysql://localhost:3306/gestao_de_eventos", "root", "");
         } 
         catch(ClassNotFoundException | SQLException erro) {
             JOptionPane.showMessageDialog(null, erro);

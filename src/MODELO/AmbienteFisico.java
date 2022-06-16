@@ -18,8 +18,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -27,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "ambiente_fisico")
-@XmlRootElement
+
 @NamedQueries({
     @NamedQuery(name = "AmbienteFisico.findAll", query = "SELECT a FROM AmbienteFisico a")
     , @NamedQuery(name = "AmbienteFisico.findByIdAmbiente", query = "SELECT a FROM AmbienteFisico a WHERE a.idAmbiente = :idAmbiente")
@@ -74,7 +72,7 @@ public class AmbienteFisico implements Serializable {
         this.ambiente = ambiente;
     }
 
-    @XmlTransient
+
     public Collection<Evento> getEventoCollection() {
         return eventoCollection;
     }

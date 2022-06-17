@@ -57,7 +57,7 @@ public class CadastrarUsuario extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         txt_DateChooser = new com.toedter.calendar.JDateChooser();
-        jButton3 = new javax.swing.JButton();
+        btnVoltar = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jLablCLOSE = new javax.swing.JLabel();
 
@@ -234,13 +234,13 @@ public class CadastrarUsuario extends javax.swing.JFrame {
 
         txt_Nome.getAccessibleContext().setAccessibleDescription("");
 
-        jButton3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(51, 153, 255));
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/Go back.png"))); // NOI18N
-        jButton3.setText("VOLTAR");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnVoltar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btnVoltar.setForeground(new java.awt.Color(51, 153, 255));
+        btnVoltar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/Go back.png"))); // NOI18N
+        btnVoltar.setText("VOLTAR");
+        btnVoltar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnVoltarActionPerformed(evt);
             }
         });
 
@@ -266,7 +266,7 @@ public class CadastrarUsuario extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton3)
+                            .addComponent(btnVoltar)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel6)
                                 .addGap(66, 66, 66)
@@ -283,7 +283,7 @@ public class CadastrarUsuario extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3)
+                .addComponent(btnVoltar)
                 .addContainerGap())
         );
 
@@ -319,7 +319,7 @@ public class CadastrarUsuario extends javax.swing.JFrame {
 
     private void btnRegistarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistarActionPerformed
         // TODO add your handling code here:
-        dispose();
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String data = sdf.format(txt_DateChooser.getDate());
         try {
@@ -344,13 +344,13 @@ public class CadastrarUsuario extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnRegistarActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         // TODO add your handling code here:
         dispose();
         Teladelogin t = new Teladelogin();
         t.setVisible(true);
         
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void jLablCLOSEMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLablCLOSEMouseClicked
         // TODO add your handling code here:
@@ -365,7 +365,7 @@ public class CadastrarUsuario extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> ComboBox_Nivel;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnRegistar;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnVoltar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

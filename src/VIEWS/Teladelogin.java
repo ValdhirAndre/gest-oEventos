@@ -5,13 +5,16 @@
  */
 package VIEWS;
 
+import MODELO.Usuario_;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 import sistemacadastramentoeavaliacaodeeventos.ConexaBD;
+
 
 /**
  *
@@ -217,38 +220,53 @@ public class Teladelogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLoginActionPerformed
-        String email = "OLA";
-        String senha = "OLA";
+        String email = null;
+        String senha = null;
+        String todNome = null;
+        String sobre = null;
+        String nivel = null;
+        String priNome = null;
+        
 
-       
-            // TODO add your handling code here:
-
-            conect = ConexaBD.ligar();
-            String sql = String.format("SELECT * FROM usuario WHERE Email = ? AND Senha = ?");
-            try (PreparedStatement stmt = conect.prepareStatement(sql)) {
-                stmt.setString(1, textEmail.getText());
-                stmt.setString(2, txtPassword.getText());
-                stmt.execute();
-                ResultSet rs = stmt.executeQuery();
-                rs.next();
-                email = rs.getString("Email");
-                senha = rs.getString("Senha");
-
+        // TODO add your handling code here:
+        conect = ConexaBD.ligar();
+        String sql = String.format("SELECT * FROM usuario WHERE Email = ? AND Senha = ?");
+        try (PreparedStatement stmt = conect.prepareStatement(sql)) {
+            stmt.setString(1, textEmail.getText());
+            stmt.setString(2, txtPassword.getText());
+            stmt.execute();
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            email = rs.getString("Email");
+            senha = rs.getString("Senha");
+            priNome = rs.getString("Nome");
+            sobre = rs.getString("Sobrenome");
+            nivel = rs.getString("Nivel");
             
+            todNome = rs.getString("Nome") + " " + sobre;
 
             // System.out.println("Email: " + email + " SENHA: " + senha);
-            if (textEmail.getText().equals(email) && txtPassword.getText().equals(senha)) {
+            if (textEmail.getText().equals(email) && txtPassword.getText().equals(senha))
+            {
                 dispose();
                 //boolean user = true;
+
                 TelaHome th = new TelaHome();
                 th.setVisible(true);
+                TelaHome.lblusuario.setText(todNome);
+                TelaHome.txtUsuario.setText(priNome);
+                TelaHome.lblNivel.setText(nivel);
 
-            } else {
+            } 
+            else 
+            {
 
                 JOptionPane.showMessageDialog(null, "Usuário ou Password Incorretos");
             }
 
-        } catch (SQLException ex) {
+        }
+        catch (SQLException ex) {
+
             ex.printStackTrace();
 
         }

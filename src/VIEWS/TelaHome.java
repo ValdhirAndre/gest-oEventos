@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -32,6 +33,7 @@ public final class TelaHome extends javax.swing.JFrame {
         CarreagarTable();
         jbtnEditarevento.setEnabled(false);
         jbtnEliminarEvento.setEnabled(false);
+        lbllhora.setText(LocalDateTime.now().getHour() + "h" + LocalDateTime.now().getMinute());
     }
 
     private int BuscarIDAmbiente(String Espaco) {
@@ -109,14 +111,13 @@ public final class TelaHome extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        lblusuario = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jlhora = new javax.swing.JLabel();
+        lblNivel = new javax.swing.JLabel();
+        lbllhora = new javax.swing.JLabel();
         labelData = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblEventos = new javax.swing.JTable();
-        jLabel8 = new javax.swing.JLabel();
         jbtnEditarevento = new javax.swing.JToggleButton();
         jbtnEliminarEvento = new javax.swing.JToggleButton();
         jbtnGerirAbt = new javax.swing.JButton();
@@ -170,12 +171,12 @@ public final class TelaHome extends javax.swing.JFrame {
             }
         });
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBackground(new java.awt.Color(0, 51, 102));
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
 
-        jPanel2.setBackground(new java.awt.Color(0, 0, 102));
-        jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/ISA LOG.png"))); // NOI18N
         jLabel2.setText("jLabel2");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -183,39 +184,39 @@ public final class TelaHome extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 151, Short.MAX_VALUE)
+                .addGap(22, 22, 22))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(72, 72, 72)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(120, 120, 120))
         );
 
-        jPanel6.setBackground(new java.awt.Color(0, 0, 102));
+        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 153, 204));
-        jLabel1.setText("Valdhir André");
+        lblusuario.setBackground(new java.awt.Color(255, 255, 255));
+        lblusuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblusuario.setForeground(new java.awt.Color(0, 153, 204));
+        lblusuario.setText("Valdhir André");
 
         jLabel4.setBackground(new java.awt.Color(255, 255, 255));
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 153, 204));
         jLabel4.setText("Nivel:");
 
-        jLabel5.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(0, 153, 204));
-        jLabel5.setText("Usuario");
+        lblNivel.setBackground(new java.awt.Color(255, 255, 255));
+        lblNivel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblNivel.setForeground(new java.awt.Color(0, 153, 204));
+        lblNivel.setText("Usuario");
 
-        jlhora.setBackground(new java.awt.Color(255, 255, 255));
-        jlhora.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jlhora.setForeground(new java.awt.Color(0, 153, 204));
-        jlhora.setText("23:26");
+        lbllhora.setBackground(new java.awt.Color(255, 255, 255));
+        lbllhora.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lbllhora.setForeground(new java.awt.Color(0, 153, 204));
+        lbllhora.setText("23:26");
 
         labelData.setBackground(new java.awt.Color(255, 255, 255));
         labelData.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -228,13 +229,13 @@ public final class TelaHome extends javax.swing.JFrame {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(34, 34, 34)
-                .addComponent(jLabel1)
+                .addComponent(lblusuario)
                 .addGap(81, 81, 81)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 334, Short.MAX_VALUE)
-                .addComponent(jlhora)
+                .addComponent(lblNivel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lbllhora)
                 .addGap(30, 30, 30)
                 .addComponent(labelData)
                 .addGap(69, 69, 69))
@@ -244,12 +245,12 @@ public final class TelaHome extends javax.swing.JFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
+                    .addComponent(lblusuario)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel5)
-                    .addComponent(jlhora)
+                    .addComponent(lblNivel)
+                    .addComponent(lbllhora)
                     .addComponent(labelData))
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         tblEventos.setAutoCreateRowSorter(true);
@@ -289,12 +290,9 @@ public final class TelaHome extends javax.swing.JFrame {
             tblEventos.getColumnModel().getColumn(9).setHeaderValue("Usuario");
         }
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(0, 153, 255));
-        jLabel8.setText("EVENTOS MARCADOS");
-
         jbtnEditarevento.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jbtnEditarevento.setForeground(new java.awt.Color(0, 153, 255));
+        jbtnEditarevento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/Modify.png"))); // NOI18N
         jbtnEditarevento.setText("EDITAR");
         jbtnEditarevento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -304,6 +302,7 @@ public final class TelaHome extends javax.swing.JFrame {
 
         jbtnEliminarEvento.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jbtnEliminarEvento.setForeground(new java.awt.Color(0, 153, 255));
+        jbtnEliminarEvento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/Erase.png"))); // NOI18N
         jbtnEliminarEvento.setText("ELIMINAR");
         jbtnEliminarEvento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -313,9 +312,10 @@ public final class TelaHome extends javax.swing.JFrame {
 
         jbtnGerirAbt.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jbtnGerirAbt.setForeground(new java.awt.Color(0, 153, 255));
+        jbtnGerirAbt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/Text preview.png"))); // NOI18N
         jbtnGerirAbt.setText("AMBIENTE");
 
-        jPanel3.setBackground(new java.awt.Color(0, 0, 102));
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -336,17 +336,17 @@ public final class TelaHome extends javax.swing.JFrame {
                 cbTipoDeEventosActionPerformed(evt);
             }
         });
-        jPanel3.add(cbTipoDeEventos, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 80, 150, -1));
+        jPanel3.add(cbTipoDeEventos, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 80, 150, -1));
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(51, 153, 255));
         jLabel9.setText("Tipo de Evento");
-        jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 60, -1, -1));
+        jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 60, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(51, 153, 255));
         jLabel10.setText("Espaço Físico");
-        jPanel3.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 60, -1, -1));
+        jPanel3.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 60, -1, -1));
 
         cbEspacoFisico.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         cbEspacoFisico.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Auditório", "Multifunções", "Pátio", "Sala de Aula", "Outro" }));
@@ -355,7 +355,7 @@ public final class TelaHome extends javax.swing.JFrame {
                 cbEspacoFisicoActionPerformed(evt);
             }
         });
-        jPanel3.add(cbEspacoFisico, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 80, 118, -1));
+        jPanel3.add(cbEspacoFisico, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 80, 118, -1));
 
         txt_Duracao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -414,6 +414,7 @@ public final class TelaHome extends javax.swing.JFrame {
 
         JbtnSalvar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         JbtnSalvar.setForeground(new java.awt.Color(51, 153, 255));
+        JbtnSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/Save.png"))); // NOI18N
         JbtnSalvar.setText("SALVAR");
         JbtnSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -423,6 +424,7 @@ public final class TelaHome extends javax.swing.JFrame {
 
         lbtnLimpar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lbtnLimpar.setForeground(new java.awt.Color(51, 153, 255));
+        lbtnLimpar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/Redo.png"))); // NOI18N
         lbtnLimpar.setText("LIMPAR");
         lbtnLimpar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -451,27 +453,19 @@ public final class TelaHome extends javax.swing.JFrame {
                         .addComponent(lbtnLimpar))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 839, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 830, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 839, Short.MAX_VALUE)
+                            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1))))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(24, 24, 24)
-                                .addComponent(jLabel8))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jbtnGerirAbt)
@@ -489,7 +483,13 @@ public final class TelaHome extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jMenuHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/Home.png"))); // NOI18N
         jMenuHome.setText("Home");
+        jMenuHome.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenuHomeMouseClicked(evt);
+            }
+        });
         jMenuHome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuHomeActionPerformed(evt);
@@ -497,6 +497,7 @@ public final class TelaHome extends javax.swing.JFrame {
         });
         jMenuBar1.add(jMenuHome);
 
+        jMenu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/Help.png"))); // NOI18N
         jMenu4.setText("Ajuda");
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
@@ -505,9 +506,10 @@ public final class TelaHome extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu4);
 
+        jMenu5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGENS/Close.png"))); // NOI18N
         jMenu5.setText("Fechar");
 
-        jItemFechar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_DOWN_MASK));
+        jItemFechar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
         jItemFechar.setText("Fechar");
         jItemFechar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -524,7 +526,7 @@ public final class TelaHome extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 1057, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -537,6 +539,9 @@ public final class TelaHome extends javax.swing.JFrame {
 
     private void jMenuHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuHomeActionPerformed
         // TODO add your handling code here:
+        dispose();
+        Tela1 t = new Tela1();
+        t.setVisible(true);
 
 
     }//GEN-LAST:event_jMenuHomeActionPerformed
@@ -576,8 +581,8 @@ public final class TelaHome extends javax.swing.JFrame {
 
         try {
 
-            String inserir = "INSERT INTO evento (NomeEvento, DataEvento, Descrissao, Duracao, tipo, fimEvento, inicioEvento, ambienteFK) "
-                    + "values (?,?,?,?,?,?,?,?)";
+            String inserir = "INSERT INTO evento (NomeEvento, DataEvento, Descrissao, Duracao, tipo, fimEvento, inicioEvento, ambienteFK, Usuar‭ioFK) "
+                    + "values (?,?,?,?,?,?,?,?,(SELECT IdUsuario FROM usuario Where Nome = '"+txtUsuario.getText()+"'))";
             PreparedStatement ps = con.prepareStatement(inserir);
             ps.setString(1, txt_NomeEvento.getText());
             ps.setString(2, txtDataEvento.getText());
@@ -586,6 +591,7 @@ public final class TelaHome extends javax.swing.JFrame {
             ps.setString(5, cbTipoDeEventos.getSelectedItem() + "");
             ps.setString(6, txtFim.getText());
             ps.setString(7, txtInicio.getText());
+            
             if (cbTipoDeEventos.getSelectedItem().equals("Virtual")) {
                ps.setInt(8, BuscarIDAmbiente("Nenhum")); 
             }else ps.setInt(8, BuscarIDAmbiente(cbEspacoFisico.getSelectedItem().toString()));
@@ -728,6 +734,14 @@ public final class TelaHome extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jbtnEditareventoActionPerformed
 
+    private void jMenuHomeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuHomeMouseClicked
+        // TODO add your handling code here:
+        dispose();
+        Tela1 t = new Tela1();
+        t.setVisible(true);
+
+    }//GEN-LAST:event_jMenuHomeMouseClicked
+
     public static void main(String[] args) {
 
         TelaHome t = new TelaHome();
@@ -745,7 +759,6 @@ public final class TelaHome extends javax.swing.JFrame {
     public javax.swing.JComboBox<String> cbTipoDeEventos;
     public com.toedter.calendar.JDateChooser jDateChooser1;
     public javax.swing.JMenuItem jItemFechar;
-    public javax.swing.JLabel jLabel1;
     public javax.swing.JLabel jLabel10;
     public javax.swing.JLabel jLabel12;
     public javax.swing.JLabel jLabel14;
@@ -754,10 +767,8 @@ public final class TelaHome extends javax.swing.JFrame {
     public javax.swing.JLabel jLabel18;
     public javax.swing.JLabel jLabel2;
     public javax.swing.JLabel jLabel4;
-    public javax.swing.JLabel jLabel5;
     public javax.swing.JLabel jLabel6;
     public javax.swing.JLabel jLabel7;
-    public javax.swing.JLabel jLabel8;
     public javax.swing.JLabel jLabel9;
     public javax.swing.JMenu jMenu4;
     public javax.swing.JMenu jMenu5;
@@ -774,14 +785,16 @@ public final class TelaHome extends javax.swing.JFrame {
     public javax.swing.JToggleButton jbtnEditarevento;
     public javax.swing.JToggleButton jbtnEliminarEvento;
     public javax.swing.JButton jbtnGerirAbt;
-    public javax.swing.JLabel jlhora;
     public javax.swing.JLabel labelData;
+    public static javax.swing.JLabel lblNivel;
+    public static javax.swing.JLabel lbllhora;
+    public static javax.swing.JLabel lblusuario;
     public javax.swing.JButton lbtnLimpar;
     public javax.swing.JTable tblEventos;
     public javax.swing.JTextField txtDataEvento;
     public javax.swing.JTextField txtFim;
     public javax.swing.JTextField txtInicio;
-    public javax.swing.JTextField txtUsuario;
+    public static javax.swing.JTextField txtUsuario;
     public javax.swing.JTextField txt_Duracao;
     public javax.swing.JTextField txt_NomeEvento;
     public javax.swing.JTextField txt_descrissao;
